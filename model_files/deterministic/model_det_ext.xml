@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <model substanceUnits="mole" timeUnits="second" extentUnits="mole">
+    <listOfUnitDefinitions>
+      <unitDefinition id="per_second">
+        <listOfUnits>
+          <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="c1" spatialDimensions="3" size="1" units="litre" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="C" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CycB" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Mstar" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="M" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="MC" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="A" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="AC" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="ACMC" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Ctot" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="flux_ratio_cycb" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="flux_ratio_c20" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="ksyn_c20" value="1" constant="true"/>
+      <parameter id="ksyn_cy" value="1" constant="true"/>
+      <parameter id="kdegbg" value="1" constant="true"/>
+      <parameter id="kinact" value="1" constant="true"/>
+      <parameter id="J" value="1" constant="true"/>
+      <parameter id="kact" value="1" constant="true"/>
+      <parameter id="k_nuk" value="1" constant="true"/>
+      <parameter id="nuk" value="1" constant="true"/>
+      <parameter id="J1" value="1" constant="true"/>
+      <parameter id="kassmc" value="1" constant="true"/>
+      <parameter id="kdissmc" value="1" constant="true"/>
+      <parameter id="kassac" value="1" constant="true"/>
+      <parameter id="kassacmc" value="1" constant="true"/>
+      <parameter id="kdissac" value="1" constant="true"/>
+      <parameter id="kdissacmc" value="1" constant="true"/>
+      <parameter id="kdeg" value="1" constant="true"/>
+      <parameter id="kdeg_cy" value="1" constant="true"/>
+      <parameter id="kdegbg_cy" value="1" constant="true"/>
+      <parameter id="Atot" value="1" constant="true"/>
+      <parameter id="Mtot" value="1" constant="true"/>
+    </listOfParameters>
+    <listOfRules>
+      <assignmentRule variable="A">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <apply>
+            <minus/>
+            <apply>
+              <minus/>
+              <ci> Atot </ci>
+              <ci> AC </ci>
+            </apply>
+            <ci> ACMC </ci>
+          </apply>
+        </math>
+      </assignmentRule>
+      <assignmentRule variable="M">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <apply>
+            <minus/>
+            <apply>
+              <minus/>
+              <apply>
+                <minus/>
+                <ci> Mtot </ci>
+                <ci> Mstar </ci>
+              </apply>
+              <ci> MC </ci>
+            </apply>
+            <ci> ACMC </ci>
+          </apply>
+        </math>
+      </assignmentRule>
+      <assignmentRule variable="Ctot">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <apply>
+            <plus/>
+            <ci> AC </ci>
+            <ci> MC </ci>
+            <apply>
+              <times/>
+              <cn type="integer"> 2 </cn>
+              <ci> ACMC </ci>
+            </apply>
+            <ci> C </ci>
+          </apply>
+        </math>
+      </assignmentRule>
+      <assignmentRule variable="flux_ratio_cycb">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> kdeg_cy </ci>
+              <ci> CycB </ci>
+              <ci> AC </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kdegbg_cy </ci>
+                <ci> CycB </ci>
+              </apply>
+              <cn type="e-notation"> 1 <sep/> -100 </cn>
+            </apply>
+          </apply>
+        </math>
+      </assignmentRule>
+      <assignmentRule variable="flux_ratio_c20">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> kdeg </ci>
+              <ci> ACMC </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kdegbg </ci>
+                <ci> Ctot </ci>
+              </apply>
+              <cn type="e-notation"> 1 <sep/> -100 </cn>
+            </apply>
+          </apply>
+        </math>
+      </assignmentRule>
+    </listOfRules>
+    <listOfReactions>
+      <reaction id="R1_Cdc20_synthesis" reversible="false" fast="false">
+        <listOfProducts>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <ci> ksyn_c20 </ci>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R2_CycB_synthesis" reversible="false" fast="false">
+        <listOfProducts>
+          <speciesReference species="CycB" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <ci> ksyn_cy </ci>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R3_Cdc20_degradation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdegbg </ci>
+              <ci> C </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R4_M_inactivation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="Mstar" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kinact </ci>
+                <ci> Mstar </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <ci> J </ci>
+                <ci> Mstar </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R5_M_activation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Mstar" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kact </ci>
+                <ci> CycB </ci>
+                <ci> M </ci>
+                <ci> k_nuk </ci>
+                <ci> nuk </ci>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <ci> J1 </ci>
+                  <ci> nuk </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> J </ci>
+                  <ci> M </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R6_MC_formation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="Mstar" stoichiometry="1" constant="true"/>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="MC" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kassmc </ci>
+              <ci> Mstar </ci>
+              <ci> C </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R7_MC_dissassociation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="MC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Mstar" stoichiometry="1" constant="true"/>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdissmc </ci>
+              <ci> MC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R8_AC_formation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="AC" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kassac </ci>
+              <ci> A </ci>
+              <ci> C </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R9_ACMC_formation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="AC" stoichiometry="1" constant="true"/>
+          <speciesReference species="MC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ACMC" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kassacmc </ci>
+              <ci> MC </ci>
+              <ci> AC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R10_AC_dissassociation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="AC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdissac </ci>
+              <ci> AC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R11_ACMC_dissassociation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="ACMC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="AC" stoichiometry="1" constant="true"/>
+          <speciesReference species="MC" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdissacmc </ci>
+              <ci> ACMC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R12_ACMC_deg" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="ACMC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdeg </ci>
+              <ci> ACMC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R13_CycB_degradation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="CycB" stoichiometry="1" constant="true"/>
+          <speciesReference species="AC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="AC" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdeg_cy </ci>
+              <ci> CycB </ci>
+              <ci> AC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R14_MC_bgdegradation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="MC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdegbg </ci>
+              <ci> MC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R15_AC_bgdegradation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="AC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdegbg </ci>
+              <ci> AC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R16_ACMC_bgdegradation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="ACMC" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdegbg </ci>
+              <ci> ACMC </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R17_Cycb_bgdegradation" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="CycB" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> kdegbg_cy </ci>
+              <ci> CycB </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
