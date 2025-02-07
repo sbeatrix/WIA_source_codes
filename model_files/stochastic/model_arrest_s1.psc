@@ -23,7 +23,7 @@ J=10
 ka=0.3
 ki=0.2
 nuk=4
-APCtot=40
+APCtot=100
 ks=0.08
 kdeg=0.6
 kdegp=0.02
@@ -32,7 +32,7 @@ n=3
 #init cond
 X=20
 APCa=1
-APCi=39
+APCi=99
 
 #assignment rules
 APCi = APCtot - APCa
