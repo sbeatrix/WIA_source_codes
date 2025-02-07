@@ -1,0 +1,39 @@
+
+#conserved species
+
+APCi=APCt-APCa
+
+#auxiliaries variables, to keep track of species computed from the conserved ones.
+aux APCi = APCi
+
+#equations for the species defined with auxiliary variables
+
+dAPCiss/dt=k*APCi-k*APCiss
+
+
+#odes
+
+dAPCa/dt=kap*APCi + ka*APCa**n/(J**n+APCa**n)*APCi- ki*APCa*nuk
+
+p nuk =4
+p APCt = 100
+p ka = 1
+p kap=0.005
+p ki = 0.3
+p J = 27.5
+p n=3
+
+
+p k=10
+
+i APCa=1
+i APCiss=99
+
+
+@ total=2000, boundaries=10000
+#AUTO settings
+@ dsmax=.5, dsmin=.0001, ds=-.02, ntst=1500, nmax=2000, npr=500, parmin=0, parmax=100
+@ autoxmin=0, autoxmax=100, autoymin=0, autoymax=100
+done
+
+#
