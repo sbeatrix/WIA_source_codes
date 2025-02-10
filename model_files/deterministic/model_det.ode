@@ -1,26 +1,26 @@
 #conserved species
 a=apctot-(ac+acmc)
-m=mad2tot-(mstar+mc+acmc)
+mi=mad2tot-(ma+mc+acmc)
 ct=c+mc+acmc*2+ac
 
 #auxiliaries variables, to keep track of species computed from the conserved ones.
 aux ct=ct
 aux a=a
-aux m=m
+aux mi=mi
 aux flux1=kdeg*acmc
 aux fluxbg=kdegbg*ct
 
 #equations for the species defined with auxiliary variables
 dctss/dt=k*ct-k*ctss
 dass/dt=k*a-k*ass
-dmss/dt=k*m-k*mss
+dmiss/dt=k*mi-k*miss
 
 #odes
-dx/dt=ksyn_x-kdeg_x*x*ac-kdegbg_x*cx
+dx/dt=ksyn_x-kdeg_x*x*ac-kdegbg_x*x
 
-dc/dt=ksyn_c20-kassmc*mstar*c+kdissmc*mc-kassac*a*c+kdissac*ac+kdeg*acmc-kdegbg*c
+dc/dt=ksyn_c20-kassmc*ma*c+kdissmc*mc-kassac*a*c+kdissac*ac+kdeg*acmc-kdegbg*c
 
-dma/dt=kact*mi*cx*k_nuk*nuk/(J1+nuk)/(J+mi)-kinact*ma/(J+ma)-kassmc*ma*c+kdissmc*mc
+dma/dt=kact*mi*x*k_nuk*nuk/(J1+nuk)/(J+mi)-kinact*ma/(J+ma)-kassmc*ma*c+kdissmc*mc
 
 dmc/dt=kassmc*ma*c-kdissmc*mc-kassacmc*ac*mc+kdissacmc*acmc-kdegbg*mc
 
@@ -36,7 +36,7 @@ p kdegbg = 0.03808
 p kinact = 0.0067
 p J = 2.1127
 p kact = 0.0242
-p k_nuk = 169.9297
+p k_nuk = 170
 p J1 = 0.4
 p kassmc = 0.0215
 p kdissmc = 0.0313
@@ -57,10 +57,10 @@ p mad2tot = 175
 #ICs
 i CTSS = 100
 i ASS = 40
-i MSS = 1
+i MISS = 1
 i X = 20
 i C = 5
-i MSTAR = 80
+i MA = 80
 i MC = 5
 i AC = 30
 i ACMC = 30
@@ -70,4 +70,3 @@ i ACMC = 30
 @ dsmax=.5, dsmin=.0001, ds=-.02, ntst=1500, nmax=2000, npr=500, parmin=0, parmax=32
 @ autoxmin=0, autoxmax=32, autoymin=0, autoymax=100
 done
-
